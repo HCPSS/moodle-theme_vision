@@ -18,9 +18,8 @@
  * This is built using the bootstrapbase template to allow for new theme's using
  * Moodle's new Bootstrap theme engine
  *
- * @package     theme_essential
- * @copyright   2013 Julian Ridden
- * @copyright   2014 Gareth J Barnard, David Bezemer
+ * @package     theme_vision
+ * @copyright   2015 Howard County Public School System
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
