@@ -1,0 +1,48 @@
+@media print {
+    html, body {
+        margin-bottom: 0;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 0;
+        padding-bottom: 0;
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        width: 100%;
+        background-image: none;
+    }
+    
+    body {
+        background-color: #FFFFFF;
+        color: #000000;
+    }
+    
+    #header-home, #header, h2.headingblock, .headermenu, .navigation, .navbar,
+    table.navbar, header.navbar, .navbar, .breadcrumb, #footer .navbar, 
+    .reportlink, .navigation, .clearfix:before, .clearfix:after, 
+    #navmenupopup option, #navmenufooterpopup option, #footer, .homelink, 
+    .sitelink, .performanceinfo, .tabrow0, .sideblock, 
+    div.discussioncontrols.clearfix, form.popupform, #intro.generalbox, 
+    #socialheading, .socials, .helplink, .breadcrumb-button input,.breadcrumb, 
+    #headerlogo,.navbar,.brand,.nav-tabs, ul.socials, div.block, div.tabtree, 
+    div#header, div.navbar, div.headermenu, div.paging, div#footer,
+    div.datapreferences {
+        display: none
+    }
+    
+    div.defaulttemplate, table {
+        border-width: 2px;
+        border-style: solid;
+        border-color: #000000;
+    }
+    
+    th, td {
+        border-width: 2px;
+        border-style: solid;
+        border-color: #000000;
+    }
+    
+    a[href]:after {
+        content: "";
+    }
+}
