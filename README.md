@@ -1,2 +1,2 @@
-# vision
-A Moodle subtheme of Essentials for HCPSS
+# Vision
+A Moodle subtheme of Essential for HCPSS. This theme impliments overrides to Essential.
