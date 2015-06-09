@@ -88,3 +88,45 @@ function theme_vision_print_single_section_page(&$that, &$courserenderer, $cours
     // Output Section Navigation
     echo $sectionnav;
 }
+
+function theme_vision_process_css($css, $theme) {
+    global $CFG;
+
+    // Change to 'true' if you want to use Essential's settings after removing the '$THEME->parents_exclude_sheets' in config.php.
+    $usingessentialsettings = true;
+    
+    if ($usingessentialsettings) {
+        require_once($CFG->dirroot . '/theme/essential/lib.php');        
+        $essentialtheme = theme_config::load('essential');        
+        $css = theme_essential_process_css($css, $essentialtheme);
+    } else {
+        // Set FontAwesome font loading path as we have not excluded the Essential 'style/fontawesome.css' file.
+        $css = theme_vision_set_fontwww($css);
+    }
+
+    // If you have your own settings, then add them here.
+
+    // Finally return processed CSS
+    return $css;
+}
+
+function theme_vision_set_fontwww($css) {
+    global $CFG;
+    $fontwww = preg_replace("(https?:)", "", $CFG->wwwroot . '/theme/essential/fonts/');
+
+    $tag = '[[setting:fontwww]]';
+
+    if (theme_essential_get_setting('bootstrapcdn')) {
+        $css = str_replace($tag, '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/fonts/', $css);
+    } else {
+        $css = str_replace($tag, $fontwww, $css);
+    }
+    return $css;
+}
+
+function theme_vision_page_init(moodle_page $page) {
+    global $CFG;
+    
+    require_once($CFG->dirroot . '/theme/essential/lib.php');
+    theme_essential_page_init($page);
+}
