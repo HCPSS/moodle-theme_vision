@@ -31,7 +31,7 @@ if (class_exists('theme_essential_format_grid_renderer'))
     {
         public function print_single_section_page($course, $sections, $mods, $modnames, $modnamesused, $displaysection)
         {
-            return theme_essential_print_single_section_page($this, $this->courserenderer, $course, $sections, $mods, $modnames, $modnamesused, $displaysection);
+            return theme_vision_print_single_section_page($this, $this->courserenderer, $course, $sections, $mods, $modnames, $modnamesused, $displaysection);
         }
     }
 }
