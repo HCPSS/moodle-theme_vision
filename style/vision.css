@@ -104,6 +104,9 @@ a, a:visited {
             transition: all .5s ease-in-out;
 }
 
+/* Hide the social media collapsed menu under the menu */
+#page-header .btn-icon { top: 10px; }
+
 .breadcrumb {
     font-size: 1em;
     text-transform: none;
