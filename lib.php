@@ -127,6 +127,17 @@ function theme_vision_set_fontwww($css) {
 function theme_vision_page_init(moodle_page $page) {
     global $CFG;
     
+    // Add a representation of the domain as a CSS class on the body. This 
+    // allows the page to be styled differently depending on the domain. A good
+    // use of this might be to have special styles for development or staging
+    // environmnets.
+    //
+    // http://my.company.com becomes CSS class my-company-com
+    $page->add_body_class(str_replace(
+        array('http://', 'https://', '.'), 
+        array('',        '',         '-'), 
+    $CFG->wwwroot));
+    
     require_once($CFG->dirroot . '/theme/essential/lib.php');
     theme_essential_page_init($page);
 }
