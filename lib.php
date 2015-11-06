@@ -133,7 +133,7 @@ function theme_vision_page_init(moodle_page $page) {
     // environmnets.
     //
     // http://my.company.com becomes CSS class my-company-com
-    $page->add_body_class(str_replace(
+    $page->add_body_class('vision-' . str_replace(
         array('http://', 'https://', '.'), 
         array('',        '',         '-'), 
     $CFG->wwwroot));
