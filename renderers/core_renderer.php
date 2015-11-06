@@ -25,6 +25,61 @@
  */
 class theme_vision_core_renderer extends theme_essential_core_renderer {
     /**
+     * Outputs the page's footer
+     * @return string HTML fragment
+     */
+    public function footer() {
+        global $CFG;
+
+        // Set certain profile fields to read only. These fields are synced by 
+        // by the Provisioner plugin so it is pointless for the user to modify 
+        // them.
+        // 
+        // TODO: Move this to the Provisioner plugin.
+        $pedit = strpos($this->page->url, '/user/editadvanced.php') !== false;
+        $pedit = $pedit || strpos($this->page->url, '/user/edit.php') !== false;
+        if ($pedit) {
+            $this->page->requires->js_init_call(
+                'ProfileModifier.readOnlyFields', 
+                ['fields' => [
+                    'firstname', 
+                    'lastname', 
+                    'email', 
+                    'username', 
+                    'institution'
+                ]]
+            );
+            
+            $this->page->requires->js(
+                new moodle_url($CFG->wwwroot . '/theme/vision/js/profile.js')
+            );
+        }
+
+        $output = $this->container_end_all(true);
+
+        $footer = $this->opencontainers->pop('header/footer');
+
+        // Provide some performance info if required
+        $performanceinfo = '';
+        if (defined('MDL_PERF') || (!empty($CFG->perfdebug) and $CFG->perfdebug > 7)) {
+            $perf = get_performance_info();
+            if (defined('MDL_PERFTOLOG') && !function_exists('register_shutdown_function')) {
+                error_log("PERF: " . $perf['txt']);
+            }
+            if (defined('MDL_PERFTOFOOT') || debugging() || $CFG->perfdebug > 7) {
+                $performanceinfo = $this->performance_output($perf, $this->get_setting('perfinfo'));
+            }
+        }
+
+        $footer = str_replace($this->unique_performance_info_token, $performanceinfo, $footer);
+        $footer = str_replace($this->unique_end_html_token, $this->page->requires->get_end_code(), $footer);
+        $this->page->set_state(moodle_page::STATE_DONE);
+        //$info = '<!-- Essential theme version: '.$this->page->theme->settings->version.', developed, enhanced and maintained by Gareth J Barnard: about.me/gjbarnard -->';
+        
+        return $output . $footer;
+    }
+    
+    /**
      * Outputs the courses menu
      * @return custom_menu object
      */

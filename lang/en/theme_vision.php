@@ -578,3 +578,6 @@ $string['nomessagesfound'] = 'No messages were found';
 $string['blogpreferences'] = 'Blog preferences';
 $string['badgepreferences'] = 'Badge preferences';
 $string['messagepreferences'] = 'Message preferences';
+
+// TODO: Move this to Provisioner
+$string['syncedfield_help'] = 'This information is synced from an external system.';
