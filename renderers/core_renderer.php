@@ -31,30 +31,6 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
     public function footer() {
         global $CFG;
 
-        // Set certain profile fields to read only. These fields are synced by 
-        // by the Provisioner plugin so it is pointless for the user to modify 
-        // them.
-        // 
-        // TODO: Move this to the Provisioner plugin.
-        $pedit = strpos($this->page->url, '/user/editadvanced.php') !== false;
-        $pedit = $pedit || strpos($this->page->url, '/user/edit.php') !== false;
-        if ($pedit) {
-            $this->page->requires->js_init_call(
-                'ProfileModifier.readOnlyFields', 
-                ['fields' => [
-                    'firstname', 
-                    'lastname', 
-                    'email', 
-                    'username', 
-                    'institution'
-                ]]
-            );
-            
-            $this->page->requires->js(
-                new moodle_url($CFG->wwwroot . '/theme/vision/js/profile.js')
-            );
-        }
-
         $output = $this->container_end_all(true);
 
         $footer = $this->opencontainers->pop('header/footer');
