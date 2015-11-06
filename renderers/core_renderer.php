@@ -76,6 +76,11 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
         $this->page->set_state(moodle_page::STATE_DONE);
         //$info = '<!-- Essential theme version: '.$this->page->theme->settings->version.', developed, enhanced and maintained by Gareth J Barnard: about.me/gjbarnard -->';
         
+        // Hide the login block unless it is specifically requested
+        if(!isset($_GET['bypass'])){
+            $footer .= '<style> .block_login{ display: none; } </style>';
+        }
+        
         return $output . $footer;
     }
     
@@ -295,9 +300,25 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
                 $icon = 'windows';
             }
             
-            $socialhtml = html_writer::start_tag('li');
+            $socialhtml = '';
+            if ($socialnetwork == 'twitter') {
+                // Twitter is the first icon and we want insert some before it
             
-            if ($socialnetwork == 'twitter') {                
+                // Synergy
+                $socialhtml .= html_writer::start_tag('li');
+                $socialhtml .= html_writer::start_tag('button', array('type' => "button",
+                    'class' => 'socialicon synergy',
+                    'onclick' => "window.open('https://sis.hcpss.org')",
+                    'title' => 'Synergy',
+                ));
+                $socialhtml .= html_writer::start_tag('i', array('class' => 'fa fa-synergy fa-inverse'));
+                $socialhtml .= html_writer::end_tag('i');
+                $socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
+                $socialhtml .= html_writer::end_tag('button');
+                $socialhtml .= html_writer::end_tag('li');
+                
+                // Canvas
+                $socialhtml .= html_writer::start_tag('li');
                 $socialhtml .= html_writer::start_tag('button', array('type' => "button",
                     'class' => 'socialicon canvas',
                     'onclick' => "window.open('https://hcpss.instructure.com')",
@@ -309,10 +330,25 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
                 $socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
                 $socialhtml .= html_writer::end_tag('button');
                 $socialhtml .= html_writer::end_tag('li');
+            }
                 
+            if ($socialnetwork == 'website') {
+                // The theme has no setting for Vimeo, we want to add it
+                // before the website (where youtube used to be)
                 $socialhtml .= html_writer::start_tag('li');
-            }        
+                $socialhtml .= html_writer::start_tag('button', array('type' => "button",
+                    'class' => 'socialicon vimeo',
+                    'onclick' => "window.open('https://vimeo.com/hcpss/')",
+                    'title' => 'Vimeo',
+                ));
+                $socialhtml .= html_writer::start_tag('i', array('class' => 'fa fa-vimeo fa-inverse'));
+                $socialhtml .= html_writer::end_tag('i');
+                $socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
+                $socialhtml .= html_writer::end_tag('button');
+                $socialhtml .= html_writer::end_tag('li');
+            }
             
+            $socialhtml .= html_writer::start_tag('li');
             $socialhtml .= html_writer::start_tag('button', array('type' => "button",
                 'class' => 'socialicon ' . $socialnetwork,
                 'onclick' => "window.open('" . $this->get_setting($socialnetwork) . "')",
