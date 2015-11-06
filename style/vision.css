@@ -332,3 +332,14 @@ td.template-token.cell.c1.lastcol {
     padding:4px;
 }
 /* End modification to RSS Plus styles */
+
+/* Social images */
+.socialicon.synergy{
+    background-image: url([[pix:theme|icons/synergy]]);
+    background-position: center;
+}
+
+.socialicon.vimeo{
+    background-image: url([[pix:theme|icons/vimeo]]);
+    background-position: center;
+}
