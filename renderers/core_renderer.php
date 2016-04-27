@@ -280,6 +280,19 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
             if ($socialnetwork == 'twitter') {
                 // Twitter is the first icon and we want insert some before it
             
+            	// Workday
+            	$socialhtml .= html_writer::start_tag('li');
+            	$socialhtml .= html_writer::start_tag('button', array('type' => "button",
+            			'class' => 'socialicon workday',
+            			'onclick' => "window.open('https://www.myworkday.com/hcpss/login.flex')",
+            			'title' => 'Workday',
+            	));
+            	$socialhtml .= html_writer::start_tag('i', array('class' => 'fa fa-workday fa-inverse'));
+            	$socialhtml .= html_writer::end_tag('i');
+            	$socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
+            	$socialhtml .= html_writer::end_tag('button');
+            	$socialhtml .= html_writer::end_tag('li');
+            	
                 // Synergy
                 $socialhtml .= html_writer::start_tag('li');
                 $socialhtml .= html_writer::start_tag('button', array('type' => "button",

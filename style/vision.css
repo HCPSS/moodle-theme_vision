@@ -343,3 +343,8 @@ td.template-token.cell.c1.lastcol {
     background-image: url([[pix:theme|icons/vimeo]]);
     background-position: center;
 }
+
+.socialicon.workday{
+    background-image: url([[pix:theme|icons/workday]]);
+    background-position: center;
+}
