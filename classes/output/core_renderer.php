@@ -23,7 +23,17 @@
  * @copyright   2014 Gareth J Barnard, David Bezemer
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class theme_vision_core_renderer extends theme_essential\output\core_renderer {
+
+namespace theme_vision\output;
+
+use theme_essential\output\core_renderer as base_renderer;
+use html_writer;
+use custom_menu;
+use moodle_page;
+use context_course;
+use moodle_url;
+
+class core_renderer extends base_renderer {
     /**
      * Outputs the page's footer
      * @return string HTML fragment
@@ -486,7 +496,7 @@ class theme_vision_core_renderer extends theme_essential\output\core_renderer {
             return false;
         }
     }
-	
+
     /**
      * This renders the breadcrumbs
      * @return string $breadcrumbs
