@@ -23,7 +23,7 @@
  * @copyright   2014 Gareth J Barnard, David Bezemer
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class theme_vision_core_renderer extends theme_essential_core_renderer {
+class theme_vision_core_renderer extends theme_essential\output\core_renderer {
     /**
      * Outputs the page's footer
      * @return string HTML fragment
@@ -51,15 +51,25 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
         $footer = str_replace($this->unique_end_html_token, $this->page->requires->get_end_code(), $footer);
         $this->page->set_state(moodle_page::STATE_DONE);
         //$info = '<!-- Essential theme version: '.$this->page->theme->settings->version.', developed, enhanced and maintained by Gareth J Barnard: about.me/gjbarnard -->';
-        
+
         // Hide the login block unless it is specifically requested
         if(!isset($_GET['bypass'])){
             $footer .= '<style> .block_login{ display: none; } </style>';
         }
-        
+
         return $output . $footer;
     }
-    
+
+	/**
+	 * The parent class contains this function, but marked it as private.
+	 */
+	protected function getfontawesomemarkup($theicon, $classes = array(), $attributes = array(), $content = '') {
+        $classes[] = 'fa fa-'.$theicon;
+        $attributes['aria-hidden'] = 'true';
+        $attributes['class'] = implode(' ', $classes);
+        return html_writer::tag('span', $content, $attributes);
+    }
+
     /**
      * Outputs the courses menu
      * @return custom_menu object
@@ -69,47 +79,155 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
 
         $coursemenu = new custom_menu();
 
-        $hasdisplaymycourses = $this->get_setting('displaymycourses');
+        $hasdisplaymycourses = \theme_essential\toolbox::get_setting('displaymycourses');
         if (isloggedin() && !isguestuser() && $hasdisplaymycourses) {
-            $mycoursetitle = $this->get_setting('mycoursetitle');
-            if ($mycoursetitle == 'module') {
-                $branchtitle = get_string('mymodules', 'theme_essential');
-            } else if ($mycoursetitle == 'unit') {
-                $branchtitle = get_string('myunits', 'theme_essential');
-            } else if ($mycoursetitle == 'class') {
-                $branchtitle = get_string('myclasses', 'theme_essential');
-            } else {
-                $branchtitle = get_string('mycourses', 'theme_essential');
+            $mycoursesorder = \theme_essential\toolbox::get_setting('mycoursesorder');
+            if (!$mycoursesorder) {
+                $mycoursesorder = 1;
             }
-            $branchlabel = '<i class="fa fa-briefcase"></i>' . $branchtitle;
-            $branchurl = new moodle_url('');
+
+            $lateststring = '';
+            if ($mycoursesorder == 3) {
+                $lateststring = 'latest';
+            }
+
+            $mycoursetitle = \theme_essential\toolbox::get_setting('mycoursetitle');
+            if ($mycoursetitle == 'module') {
+                $branchtitle = get_string('my'.$lateststring.'modules', 'theme_essential');
+            } else if ($mycoursetitle == 'unit') {
+                $branchtitle = get_string('my'.$lateststring.'units', 'theme_essential');
+            } else if ($mycoursetitle == 'class') {
+                $branchtitle = get_string('my'.$lateststring.'classes', 'theme_essential');
+            } else {
+                $branchtitle = get_string('my'.$lateststring.'courses', 'theme_essential');
+            }
+            $branchlabel = $this->getfontawesomemarkup('briefcase').$branchtitle;
+            $branchurl = new moodle_url('#');
             $branchsort = 200;
 
             $branch = $coursemenu->add($branchlabel, $branchurl, $branchtitle, $branchsort);
 
             $hometext = get_string('myhome');
-            $homelabel = html_writer::tag('i', '', array('class' => 'fa fa-home')).html_writer::tag('span', ' '.$hometext);
+            $homelabel = html_writer::tag('span', $this->getfontawesomemarkup('home').html_writer::tag('span', ' '.$hometext));
             $branch->add($homelabel, new moodle_url('/my/index.php'), $hometext);
 
-            // Get 'My courses' sort preference from admin config.
-            if (!$sortorder = $CFG->navsortmycoursessort) {
-                $sortorder = 'sortorder';
+            // Retrieve courses and add them to the menu when they are visible.
+            $numcourses = 0;
+            $hasdisplayhiddenmycourses = \theme_essential\toolbox::get_setting('displayhiddenmycourses');
+
+            $courses = array();
+            if (($mycoursesorder == 1) || ($mycoursesorder == 2)) {
+                $direction = 'ASC';
+                if ($mycoursesorder == 1) {
+                    // Get 'My courses' sort preference from admin config.
+                    if (!$sortorder = $CFG->navsortmycoursessort) {
+                        $sortorder = 'sortorder';
+                    }
+                } else if ($mycoursesorder == 2) {
+                    $sortorder = 'id';
+                    $mycoursesorderidorder = \theme_essential\toolbox::get_setting('mycoursesorderidorder');
+                    if ($mycoursesorderidorder == 2) {
+                        $direction = 'DESC';
+                    }
+                }
+                $courses = enrol_get_my_courses(null, $sortorder.' '.$direction);
+            } else if ($mycoursesorder == 3) {
+                /*
+                 * To test:
+                 * 1. As an administrator...
+                 * 2. Create a test user to be a student.
+                 * 3. Create a course with a start time before the current and enrol the student.
+                 * 4. Log in as the student and access the course.
+                 * 5. Log back in as an administrator and create a second course and enrol the student.
+                 * 6. Log back in as the student and navigate to the dashboard.
+                 * 7. Confirm that the second course is listed before the first on the menu.
+                 */
+                // Get the list of enrolled courses as before but as for us, ignore 'navsortmycoursessort'.
+                $courses = enrol_get_my_courses(null, 'sortorder ASC');
+                if ($courses) {
+                    // We have something to work with.  Get the last accessed information for the user and populate.
+                    global $DB, $USER;
+                    $lastaccess = $DB->get_records('user_lastaccess', array('userid' => $USER->id), '', 'courseid, timeaccess');
+                    if ($lastaccess) {
+                        foreach ($courses as $course) {
+                            if (!empty($lastaccess[$course->id])) {
+                                $course->timeaccess = $lastaccess[$course->id]->timeaccess;
+                            }
+                        }
+                    }
+                    // Determine if we need to query the enrolment and user enrolment tables.
+                    $enrolquery = false;
+                    foreach ($courses as $course) {
+                        if (empty($course->timeaccess)) {
+                            $enrolquery = true;
+                            break;
+                        }
+                    }
+                    if ($enrolquery) {
+                        // We do.
+                        $params = array('userid' => $USER->id);
+                        $sql = "SELECT ue.id, e.courseid, ue.timestart
+                            FROM {enrol} e
+                            JOIN {user_enrolments} ue ON (ue.enrolid = e.id AND ue.userid = :userid)";
+                        $enrolments = $DB->get_records_sql($sql, $params, 0, 0);
+                        if ($enrolments) {
+                            // Sort out any multiple enrolments on the same course.
+                            $userenrolments = array();
+                            foreach ($enrolments as $enrolment) {
+                                if (!empty($userenrolments[$enrolment->courseid])) {
+                                    if ($userenrolments[$enrolment->courseid] < $enrolment->timestart) {
+                                        // Replace.
+                                        $userenrolments[$enrolment->courseid] = $enrolment->timestart;
+                                    }
+                                } else {
+                                    $userenrolments[$enrolment->courseid] = $enrolment->timestart;
+                                }
+                            }
+                            // We don't need to worry about timeend etc. as our course list will be valid for the user from above.
+                            foreach ($courses as $course) {
+                                if (empty($course->timeaccess)) {
+                                    $course->timestart = $userenrolments[$course->id];
+                                }
+                            }
+                        }
+                    }
+                    uasort($courses, array($this, 'timeaccesscompare'));
+                }
             }
 
-            // Retrieve courses and add them to the menu when they are visible
-            $numcourses = 0;
-            if ($courses = enrol_get_my_courses(NULL, $sortorder . ' ASC')) {
+            if ($courses) {
+                $mycoursesmax = \theme_essential\toolbox::get_setting('mycoursesmax');
+                if (!$mycoursesmax) {
+                    $mycoursesmax = PHP_INT_MAX;
+                }
                 foreach ($courses as $course) {
                     if ($course->visible) {
-                        // HCPSS Mod: Change fa-graduation-cap to fa-comments
-                        $branch->add('<i class="fa fa-comments"></i>' . format_string($course->fullname), new moodle_url('/course/view.php?id=' . $course->id), format_string($course->shortname));
-                        $numcourses += 1;
-                    } else if (has_capability('moodle/course:viewhiddencourses', context_system::instance())) {
                         $branchtitle = format_string($course->shortname);
-                        $branchlabel = '<span class="dimmed_text"><i class="fa fa-eye-slash"></i>' . format_string($course->fullname) . '</span>';
-                        $branchurl = new moodle_url('/course/view.php', array('id' =>$course->id));
+                        $branchurl = new moodle_url('/course/view.php', array('id' => $course->id));
+                        $enrolledclass = '';
+                        if (!empty($course->timestart)) {
+                            $enrolledclass .= ' class="onlyenrolled"';
+                        }
+						// HCPSS mod to change the graduation cap icons to the comment icon. This line is the only
+						// reason this method is overridden.
+                        $branchlabel = '<span'.$enrolledclass.'>'.$this->getfontawesomemarkup('comments').format_string($course->fullname).'</span>';
+						// End HCPSS mod
                         $branch->add($branchlabel, $branchurl, $branchtitle);
                         $numcourses += 1;
+                    } else if (has_capability('moodle/course:viewhiddencourses', context_course::instance($course->id)) && $hasdisplayhiddenmycourses) {
+                        $branchtitle = format_string($course->shortname);
+                        $enrolledclass = '';
+                        if (!empty($course->timestart)) {
+                            $enrolledclass .= ' onlyenrolled';
+                        }
+                        $branchlabel = '<span class="dimmed_text'.$enrolledclass.'">'.$this->getfontawesomemarkup('eye-slash').
+                            format_string($course->fullname) . '</span>';
+                        $branchurl = new moodle_url('/course/view.php', array('id' => $course->id));
+                        $branch->add($branchlabel, $branchurl, $branchtitle);
+                        $numcourses += 1;
+                    }
+                    if ($numcourses == $mycoursesmax) {
+                        break;
                     }
                 }
             }
@@ -202,7 +320,7 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
             $usermenu .= $this->theme_essential_render_preferences($context);
 
             $usermenu .= html_writer::empty_tag('hr', array('class' => 'sep'));
-            
+
             // Check if messaging is enabled.
             if (!empty($CFG->messaging)) {
                 $branchlabel = '<em><i class="fa fa-envelope"></i>' . get_string('pluginname', 'block_messages') . '</em>';
@@ -222,7 +340,7 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
 
                 $usermenu .= html_writer::empty_tag('hr', array('class' => 'sep'));
             }
-            
+
             // Render direct logout link
             $branchlabel = '<em><i class="fa fa-sign-out"></i>' . get_string('logout') . '</em>';
             $branchurl = new moodle_url('/login/logout.php?sesskey=' . sesskey());
@@ -256,12 +374,26 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
             $branchurl = new moodle_url('/user/edit.php', array('id' => $USER->id));
             $preferences .= html_writer::tag('li', html_writer::link($branchurl, $branchlabel));
         }
-        
+
         $preferences .= html_writer::end_tag('ul');
         $preferences .= html_writer::end_tag('li');
         return $preferences;
     }
 
+	public function get_tile_file($filename) {
+        global $CFG;
+        $filename .= '.php';
+
+		if (file_exists("$CFG->dirroot/theme/vision/layout/tiles/$filename")) {
+			return "$CFG->dirroot/theme/vision/layout/tiles/$filename";
+		} else if (file_exists("$CFG->dirroot/theme/essential/layout/tiles/$filename")) {
+            return "$CFG->dirroot/theme/essential/layout/tiles/$filename";
+        } else if (!empty($CFG->themedir) and file_exists("$CFG->themedir/essential/layout/tiles/$filename")) {
+            return "$CFG->themedir/essential/layout/tiles/$filename";
+        } else {
+            return dirname(__FILE__) . "/$filename";
+        }
+    }
 
     public function render_social_network($socialnetwork) {
         if ($this->get_setting($socialnetwork)) {
@@ -275,11 +407,11 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
             } else if ($socialnetwork === 'winphone') {
                 $icon = 'windows';
             }
-            
+
             $socialhtml = '';
             if ($socialnetwork == 'twitter') {
                 // Twitter is the first icon and we want insert some before it
-            
+
             	// Workday
             	$socialhtml .= html_writer::start_tag('li');
             	$socialhtml .= html_writer::start_tag('button', array('type' => "button",
@@ -292,7 +424,7 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
             	$socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
             	$socialhtml .= html_writer::end_tag('button');
             	$socialhtml .= html_writer::end_tag('li');
-            	
+
                 // Synergy
                 $socialhtml .= html_writer::start_tag('li');
                 $socialhtml .= html_writer::start_tag('button', array('type' => "button",
@@ -305,7 +437,7 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
                 $socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
                 $socialhtml .= html_writer::end_tag('button');
                 $socialhtml .= html_writer::end_tag('li');
-                
+
                 // Canvas
                 $socialhtml .= html_writer::start_tag('li');
                 $socialhtml .= html_writer::start_tag('button', array('type' => "button",
@@ -320,7 +452,7 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
                 $socialhtml .= html_writer::end_tag('button');
                 $socialhtml .= html_writer::end_tag('li');
             }
-                
+
             if ($socialnetwork == 'website') {
                 // The theme has no setting for Vimeo, we want to add it
                 // before the website (where youtube used to be)
@@ -336,7 +468,7 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
                 $socialhtml .= html_writer::end_tag('button');
                 $socialhtml .= html_writer::end_tag('li');
             }
-            
+
             $socialhtml .= html_writer::start_tag('li');
             $socialhtml .= html_writer::start_tag('button', array('type' => "button",
                 'class' => 'socialicon ' . $socialnetwork,
@@ -348,10 +480,48 @@ class theme_vision_core_renderer extends theme_essential_core_renderer {
             $socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
             $socialhtml .= html_writer::end_tag('button');
             $socialhtml .= html_writer::end_tag('li');
-            
+
             return $socialhtml;
         } else {
             return false;
         }
+    }
+	
+    /**
+     * This renders the breadcrumbs
+     * @return string $breadcrumbs
+     */
+    public function navbar() {
+        $breadcrumbstyle = \theme_essential\toolbox::get_setting('breadcrumbstyle');
+        if ($breadcrumbstyle) {
+            if ($breadcrumbstyle == '4') {
+                $breadcrumbstyle = '1'; // Fancy style with no collapse.
+            }
+
+            $showcategories = true;
+            if (($this->page->pagelayout == 'course') || ($this->page->pagelayout == 'incourse')) {
+                $showcategories = \theme_essential\toolbox::get_setting('categoryincoursebreadcrumbfeature');
+            }
+
+            $breadcrumbs = html_writer::tag('span', get_string('pagepath'), array('class' => 'accesshide', 'id' => 'navbar-label'));
+            $breadcrumbs .= html_writer::start_tag('nav', array('aria-labelledby' => 'navbar-label'));
+            $breadcrumbs .= html_writer::start_tag('ul', array('class' => "breadcrumb style$breadcrumbstyle"));
+            foreach ($this->page->navbar->get_items() as $item) {
+                // Test for single space hide section name trick.
+                if ((strlen($item->text) == 1) && ($item->text[0] == ' ')) {
+                    continue;
+                }
+                if ((!$showcategories) && ($item->type == \navigation_node::TYPE_CATEGORY)) {
+                    continue;
+                }
+                $item->hideicon = true;
+                $breadcrumbs .= html_writer::tag('li', $this->render($item));
+            }
+            $breadcrumbs .= html_writer::end_tag('ul');
+            $breadcrumbs .= html_writer::end_tag('nav');
+        } else {
+            $breadcrumbs = '';
+        }
+        return $breadcrumbs;
     }
 }

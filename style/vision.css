@@ -21,20 +21,13 @@ h2.pagetitle {
     font-size: 13px;
 }
 
-.row.header, .forumpost .row .content-mask, 
+.row.header, .forumpost .row .content-mask,
 .path-course-view .unread, span.unread {
     background-color: #f5f5f5;
 }
 
 a, a:visited {
     color: #3171B9;
-}
-
-.socials a {
-    color:          #BBBBBB;
-    font-family:    FontAwesome;
-    font-size:      2.5em;
-    line-height:    25px;
 }
 
 .course-content ul.gridicons li.currentselected {
@@ -56,7 +49,7 @@ a, a:visited {
 .instancename{
     font-size:      17px;
     text-shadow:    0px 0px 20px #fff;
-    font-family:    "Trebuchet MS",Arial,Helvetica,sans-serif;
+    /* font-family:    "Trebuchet MS",Arial,Helvetica,sans-serif; */
     font-weight:    bolder !important;
 }
 
@@ -82,109 +75,12 @@ a, a:visited {
     padding-top:            2px;
 }
 
-.navbar{
-       -moz-box-shadow: 3px 3px 5px 6px #ccc;
-    -webkit-box-shadow: 3px 3px 5px 6px #ccc;
-            box-shadow: 0px 4px 0px 0px #5584B9, 0px 4px 7px 6px #8d8b8a;
-    
-    margin-bottom: 8;
-}
 
-.navbar .nav{
-    border-style: none;
-}
-
-.navbar .nav > li > a {
-    border-style: none;
-    
-    -webkit-transition: all .5s ease-in-out;
-       -moz-transition: all .5s ease-in-out;
-        -ms-transition: all .5s ease-in-out;
-         -o-transition: all .5s ease-in-out;
-            transition: all .5s ease-in-out;
-}
-
-/* Hide the social media collapsed menu under the menu */
-#page-header .btn-icon { top: 10px; }
 
 .breadcrumb {
     font-size: 1em;
     text-transform: none;
     font-style: italic;
-}
-
-.block_settings .header .title h2:before {
-    content: "";
-    color: #00B25D;
-}
-
-.block_news_items .header .title h2:before {
-    content: "";
-    color: #FF4100;
-}
-
-.block_search_forums .header .title h2:before {
-    content: "";
-    color: #FFBC00;
-}
-
-.block_calendar_upcoming .header .title h2:before, .block_calendar_month .header .title h2:before {
-    content: "";
-    color: #5AE4D2;
-}
-
-.block_participants .header .title h2:before, .block_online_users .header .title h2:before {
-    content: "";
-    color: #0063A4;
-}
-
-.block_rss_client .header .title h2:before {
-    content: "";
-    color: #FFBC00;
-}
-
-.block_messages .header .title h2:before {
-    content: "";
-    color: #FF7140;
-}
-
-#essentialCarousel.carousel .carousel-inner .carousel-caption {
-    background-attachment:  scroll;
-    background-clip:        border-box;
-    background-color:       rgba(2, 55, 115, 0.75);
-    background-image:       none;
-    background-origin:      padding-box;
-    background-position:    0 0;
-    background-repeat:      repeat;
-    background-size:        auto auto;
-}
-
-#essentialCarousel.carousel .carousel-inner .carousel-caption h4, #essentialCarousel.carousel .carousel-inner .carousel-caption p{
-    color:          #FFF;
-    padding-bottom: 0;
-    padding-left:   20px;
-    padding-right:  20px;
-    padding-top:    0;
-}
-
-button.twitter{
-    background: #00aced;
-}
-
-button.facebook{
-    background: #4a6ea9;
-}
-
-button.youtube{
-    background: #f42941;
-}
-
-button.googleplus, button.googleplus:hover, button.googleplus:focus{
-    background: #10167f
-}
-
-button.website, button.website:hover, button.website:focus{
-    background: #00B25D
 }
 
 h1#title {
@@ -213,17 +109,7 @@ h2#subtitle {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family:"Trebuchet MS",Arial,Helvetica,sans-serif;
-}
-
-.block .header .title h2, .block h3.main {
-    font-size:  1.3em;
-    color:      #888;
-}
-
-.block .header .title h2:before {
-    font-size:      1.3em;
-    margin-right:   0.3em;
+    /* font-family:"Trebuchet MS",Arial,Helvetica,sans-serif; */
 }
 
 .breadcrumb-nav ul.breadcrumb.style2 li a {
@@ -241,10 +127,6 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
 }
 
-#essentialCarousel.carousel .carousel-indicators li{
-    background: #023773;
-}
-
 td.template-token.cell.c1.lastcol input[type="checkbox"]+label {
     display: inline-block;
     width: 95%;
@@ -254,14 +136,6 @@ td.template-token.cell.c1.lastcol {
     max-width: 600px;
 }
 
-#page-footer .block .header .title h2:before {
-    color: #FFFFFF;
-}
-
-.carousel a, .carousel a:visited{
-    text-decoration: none;
-}
-
 .anchor {
     display:    block;
     height:     213px;
@@ -269,38 +143,8 @@ td.template-token.cell.c1.lastcol {
     visibility: hidden;
 }
 
-.navbar .navbar-inner .messagemenu ul.nav ul.dropdown-menu li > a > .notification .icon {
-    float:          left;
-    font-size:      5em;
-    margin-right:   0;
-    margin-top:     5px;
-}
-
 .path-mod-forum .forumheaderlist td {
     border: none;
-}
-
-.block_course_overview .content h2.title {
-    font-weight: bolder !important;
-    font-family: "Trebuchet MS",Arial,Helvetica,sans-serif;
-}
-
-.block .header .title h2, .block h3.main{
-    font-family: Oswald, Arial, Helvetica, sans-serif;
-}
-
-.block .header h2  {
-    font-weight: normal;
-}
-
-.block_rss_client .list li {
-    border-top-color:   -moz-use-text-color;
-    border-top-style:   none;
-    border-top-width:   1px;
-    padding-bottom:     5px;
-    padding-left:       5px;
-    padding-right:      5px;
-    padding-top:        5px;
 }
 
 .coursetitle {
@@ -310,41 +154,9 @@ td.template-token.cell.c1.lastcol {
 @media (max-width: 980px){
     .navbar {
         position: absolute;
-    }   
+    }
 }
 
 .footercredit{ display:none; }
 
 .navbar .navbar-inner #custom_menu_activitystream{display:none;}
-
-/* Modification to RSS Plus styles */
-.rsslink{
-    background: #ffffff !important ;
-    padding-left: 4px;
-    padding-right: 4px;
-}
-
-.rsslink a {
-    font-weight:bold;
-}
-
-.rssdescription{
-    padding:4px;
-}
-/* End modification to RSS Plus styles */
-
-/* Social images */
-.socialicon.synergy{
-    background-image: url([[pix:theme|icons/synergy]]);
-    background-position: center;
-}
-
-.socialicon.vimeo{
-    background-image: url([[pix:theme|icons/vimeo]]);
-    background-position: center;
-}
-
-.socialicon.workday{
-    background-image: url([[pix:theme|icons/workday]]);
-    background-position: center;
-}

@@ -1,0 +1,49 @@
+@blocks: settings, news_items, search_forums, calendar_upcoming, calendar_month,
+    participants, online_users, rss_client, messages;
+@blockcolors: #00B25D, #FF4100, #FFBC00, #5AE4D2, #5AE4D2, #0063A4, #0063A4, 
+    #FFBC00, #FF7140;
+    
+.blockh2s(@blocks; @blockcolors; length(@blocks));
+
+.block .header {
+    h2 {
+        font-weight: normal;
+    }
+    
+    .title h2 {
+        font-family: Oswald, Arial, Helvetica, sans-serif;
+        &:before {
+            font-size:      1.3em;
+            margin-right:   0.3em;
+        }
+    }
+}
+
+.block .content .course_list h2.title, .block h3.main {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.block_rss_client .list li {
+    border-top-color:   -moz-use-text-color;
+    border-top-style:   none;
+    border-top-width:   1px;
+    padding:            5px;
+}
+
+.block_course_overview .content h2.title {
+    font-weight: bolder !important;
+}
+
+#page-footer .footerblock .block {
+    border: none;
+    background-color: inherit;
+    box-shadow: none;
+
+    .fa {
+        color: #ffffff;
+    }
+
+    h2 {
+        text-shadow: none;
+    }
+}

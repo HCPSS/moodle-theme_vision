@@ -1,0 +1,57 @@
+.socialimg(@bgcolor) {
+    background: @bgcolor;
+    color: #ffffff;
+    text-shadow: none;
+
+    .fa { color: #ffffff; }
+}
+
+.socialicon(@icon) {
+    background-image: @icon;
+    background-position: center center;
+}
+
+.transition(@transition) {
+    -webkit-transition: @transition;
+       -moz-transition: @transition;
+        -ms-transition: @transition;
+         -o-transition: @transition;
+            transition: @transition;
+}
+
+.socialimages(@names; @colors; @index) when (@index > 0) {
+    .socialimages(@names; @colors; (@index - 1));
+
+    @name  : extract(@names, @index);
+    @color : extract(@colors, @index);
+
+    button.socialicon.@{name},
+    button.socialicon.@{name}:hover,
+    button.socialicon.@{name}:focus {
+        .socialimg(@color);
+    }
+}
+
+.socialicons(@names; @index) when (@index > 0) {
+    .socialicons(@names; (@index - 1));
+
+    @name : extract(@names, @index);
+
+    button.socialicon.@{name},
+    button.socialicon.@{name}:hover,
+    button.socialicon.@{name}:focus {
+        .socialicon(url("[[pix:theme|icons/@{name}]]"));
+    }
+}
+
+.blockh2s(@blocks; @colors; @index) when (@index > 0) {
+    .blockh2s(@blocks; @colors; (@index - 1));
+    
+    @block: extract(@blocks, @index);
+    @class: ~".block_@{block}";
+    @color: extract(@colors, @index);
+    
+    body @{class} .header .title .fa {
+        color: @color;
+    }
+}

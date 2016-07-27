@@ -94,10 +94,10 @@ function theme_vision_process_css($css, $theme) {
 
     // Change to 'true' if you want to use Essential's settings after removing the '$THEME->parents_exclude_sheets' in config.php.
     $usingessentialsettings = true;
-    
+
     if ($usingessentialsettings) {
-        require_once($CFG->dirroot . '/theme/essential/lib.php');        
-        $essentialtheme = theme_config::load('essential');        
+        require_once($CFG->dirroot . '/theme/essential/lib.php');
+        $essentialtheme = theme_config::load('essential');
         $css = theme_essential_process_css($css, $essentialtheme);
     } else {
         // Set FontAwesome font loading path as we have not excluded the Essential 'style/fontawesome.css' file.
@@ -126,18 +126,18 @@ function theme_vision_set_fontwww($css) {
 
 function theme_vision_page_init(moodle_page $page) {
     global $CFG;
-    
-    // Add a representation of the domain as a CSS class on the body. This 
+
+    // Add a representation of the domain as a CSS class on the body. This
     // allows the page to be styled differently depending on the domain. A good
     // use of this might be to have special styles for development or staging
     // environmnets.
     //
     // http://my.company.com becomes CSS class my-company-com
     $page->add_body_class('vision-' . str_replace(
-        array('http://', 'https://', '.'), 
-        array('',        '',         '-'), 
+        array('http://', 'https://', '.'),
+        array('',        '',         '-'),
     $CFG->wwwroot));
-    
+
     require_once($CFG->dirroot . '/theme/essential/lib.php');
-    theme_essential_page_init($page);
+    // theme_essential_page_init($page);
 }
