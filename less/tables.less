@@ -1,0 +1,28 @@
+// The Essential theme has moved stripe settings into configuration. But it does
+// not differentiate between anchor tags and non anchor text when hovering over
+// the table rows. Who would want that?
+.user-enroller-panel .uep-search-results .users,
+.user-enroller-panel .uep-search-results .cohorts,
+table.grading-report,
+.forumheaderlist,
+.generaltable,
+table.flexible,
+.category_subcategories,
+table#modules,
+table#permissions {
+    tbody {
+        tr:hover > td, 
+        tr:hover > td > h3,
+        tr:hover > th {
+            color: inherit;
+        }
+        
+        tr:hover > td > a:not(.btn) {
+             color: @standardblue;
+        }
+        
+        tr:hover > td > a:not(.btn):hover {
+             color: @darkblue;
+        }
+    }
+}

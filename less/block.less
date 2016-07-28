@@ -1,7 +1,15 @@
+@settingblockcolor:     #00B25D;
+@newsblockcolor:        #FF4100;
+@searchblockcolor:      #FFBC00;
+@calendarblockcolor:    #5AE4D2;
+@usersblockcolor:       #0063A4;
+@messagesblockcolor:    #FF7140;
+
 @blocks: settings, news_items, search_forums, calendar_upcoming, calendar_month,
     participants, online_users, rss_client, messages;
-@blockcolors: #00B25D, #FF4100, #FFBC00, #5AE4D2, #5AE4D2, #0063A4, #0063A4, 
-    #FFBC00, #FF7140;
+@blockcolors: @settingblockcolor, @newsblockcolor, @searchblockcolor, 
+    @calendarblockcolor, @calendarblockcolor, @usersblockcolor, 
+    @usersblockcolor, @searchblockcolor, @messagesblockcolor;
     
 .blockh2s(@blocks; @blockcolors; length(@blocks));
 

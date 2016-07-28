@@ -1,3 +1,6 @@
+@darkblue: #023773;
+@standardblue: #3171b9;
+
 @import "mixins";
 @import "block";
 @import "carousel";
@@ -9,6 +12,7 @@
 @import "print";
 @import "course";
 @import "forum";
+@import "tables";
 @import "footer";
 
 body {
@@ -17,14 +21,14 @@ body {
 
 h3 {
     font-size: 20px;
-    color:#023773;
+    color:@darkblue;
     line-height: 20px;
 }
 
 h2.pagetitle {
     font-size: 20px;
     line-height: 35px;
-    color: #023773;
+    color: @darkblue;
 }
 
 .path-mod-book .block_book_toc li {
@@ -120,7 +124,7 @@ button.website, button.website:hover, button.website:focus{
 background: #00B25D
 }
 h1#title {
-    color: #023773;
+    color: @darkblue;
 font-size: 2.1em;
 margin-top: -2px;
 }
@@ -163,7 +167,7 @@ color: #888;
     width: 100%;
 }
 #essentialCarousel.carousel .carousel-indicators li{
-background: #023773;
+background: @darkblue;
 }
 td.template-token.cell.c1.lastcol input[type="checkbox"]+label {
 display: inline-block;
