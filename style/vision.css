@@ -160,3 +160,28 @@ td.template-token.cell.c1.lastcol {
 .footercredit{ display:none; }
 
 .navbar .navbar-inner #custom_menu_activitystream{display:none;}
+
+/* Modification to RSS Plus styles */
+.rsslink{
+    background: #ffffff !important ;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.rsslink a {
+    font-weight:bold;
+}
+
+.rssdescription{
+    padding:4px;
+}
+/* End modification to RSS Plus styles */
+
+/* Social icons */
+.socials img:hover {
+    box-shadow: none;
+}
+
+ul.socials li {
+    padding: 0 0 0 5px;
+}

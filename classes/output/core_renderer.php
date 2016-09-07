@@ -405,96 +405,54 @@ class core_renderer extends base_renderer {
         }
     }
 
-    public function render_social_network($socialnetwork) {
-        if ($this->get_setting($socialnetwork)) {
-            $icon = $socialnetwork;
-            if ($socialnetwork === 'googleplus') {
-                $icon = 'pencil';
-            } else if ($socialnetwork === 'website') {
-                $icon = 'fire';
-            } else if ($socialnetwork === 'ios') {
-                $icon = 'apple';
-            } else if ($socialnetwork === 'winphone') {
-                $icon = 'windows';
-            }
-
-            $socialhtml = '';
-            if ($socialnetwork == 'twitter') {
-                // Twitter is the first icon and we want insert some before it
-
-            	// Workday
-            	$socialhtml .= html_writer::start_tag('li');
-            	$socialhtml .= html_writer::start_tag('button', array('type' => "button",
-            			'class' => 'socialicon workday',
-            			'onclick' => "window.open('https://www.myworkday.com/hcpss/login.flex')",
-            			'title' => 'Workday',
-            	));
-            	$socialhtml .= html_writer::start_tag('i', array('class' => 'fa fa-workday fa-inverse'));
-            	$socialhtml .= html_writer::end_tag('i');
-            	$socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
-            	$socialhtml .= html_writer::end_tag('button');
-            	$socialhtml .= html_writer::end_tag('li');
-
-                // Synergy
-                $socialhtml .= html_writer::start_tag('li');
-                $socialhtml .= html_writer::start_tag('button', array('type' => "button",
-                    'class' => 'socialicon synergy',
-                    'onclick' => "window.open('https://sis.hcpss.org')",
-                    'title' => 'Synergy',
-                ));
-                $socialhtml .= html_writer::start_tag('i', array('class' => 'fa fa-synergy fa-inverse'));
-                $socialhtml .= html_writer::end_tag('i');
-                $socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
-                $socialhtml .= html_writer::end_tag('button');
-                $socialhtml .= html_writer::end_tag('li');
-
-                // Canvas
-                $socialhtml .= html_writer::start_tag('li');
-                $socialhtml .= html_writer::start_tag('button', array('type' => "button",
-                    'class' => 'socialicon canvas',
-                    'onclick' => "window.open('https://hcpss.instructure.com')",
-                    'title' => 'Canvas',
-                    'style' => 'background-image: url("https://s3.amazonaws.com/hcpss.web.site/images/hub/canvasicon.png"); background-position: center;',
-                ));
-                $socialhtml .= html_writer::start_tag('i', array('class' => 'fa fa-canvas fa-inverse'));
-                $socialhtml .= html_writer::end_tag('i');
-                $socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
-                $socialhtml .= html_writer::end_tag('button');
-                $socialhtml .= html_writer::end_tag('li');
-            }
-
-            if ($socialnetwork == 'website') {
-                // The theme has no setting for Vimeo, we want to add it
-                // before the website (where youtube used to be)
-                $socialhtml .= html_writer::start_tag('li');
-                $socialhtml .= html_writer::start_tag('button', array('type' => "button",
-                    'class' => 'socialicon vimeo',
-                    'onclick' => "window.open('https://vimeo.com/hcpss/')",
-                    'title' => 'Vimeo',
-                ));
-                $socialhtml .= html_writer::start_tag('i', array('class' => 'fa fa-vimeo fa-inverse'));
-                $socialhtml .= html_writer::end_tag('i');
-                $socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
-                $socialhtml .= html_writer::end_tag('button');
-                $socialhtml .= html_writer::end_tag('li');
-            }
-
-            $socialhtml .= html_writer::start_tag('li');
-            $socialhtml .= html_writer::start_tag('button', array('type' => "button",
-                'class' => 'socialicon ' . $socialnetwork,
-                'onclick' => "window.open('" . $this->get_setting($socialnetwork) . "')",
-                'title' => get_string($socialnetwork, 'theme_essential'),
-            ));
-            $socialhtml .= html_writer::start_tag('i', array('class' => 'fa fa-' . $icon . ' fa-inverse'));
-            $socialhtml .= html_writer::end_tag('i');
-            $socialhtml .= html_writer::start_span('sr-only') . html_writer::end_span();
-            $socialhtml .= html_writer::end_tag('button');
-            $socialhtml .= html_writer::end_tag('li');
-
-            return $socialhtml;
-        } else {
-            return false;
+    /**
+     * Render a social media icon.
+     *
+     * @param string $name
+     * @param string $url
+     * @return string
+     */
+    public function render_social_network($name, $url = null) {
+        if (!$url) {
+            $url = $this->get_setting(strtolower($name));
         }
+
+        $classes = sprintf('socialicon %s', strtolower($name));
+
+        $src = sprintf('https://s3.amazonaws.com/hcpss.web.site/images/hub/%s.png', strtolower($name));
+        $image = html_writer::img($src, $name);
+
+        $socialhtml = html_writer::start_tag('li');
+        $socialhtml .= html_writer::link($url, $image, array(
+            'class'   => $classes,
+            'target' => '_blank',
+            'rel'     => 'noopener noreferrer',
+            'title'   => $name,
+        ));
+        $socialhtml .= html_writer::end_tag('li');
+
+        return $socialhtml;
+    }
+
+    /**
+     * Render all social media icons.
+     *
+     * @param type $socialnetwork
+     * @return type
+     */
+    public function render_social_networks() {
+        $output = '';
+
+        $output .= $this->render_social_network('Workday', 'https://www.myworkday.com/hcpss/login.flex');
+        $output .= $this->render_social_network('Synergy', 'https://sis.hcpss.org');
+        $output .= $this->render_social_network('Canvas', 'https://hcpss.instructure.com');
+        $output .= $this->render_social_network('Frontline', ' https://hcpss.me/saml/saml2/idp/SSOService.php?spentityid=http%3A%2F%2Fwww.mylearningplan.com%2Fmvc%2Fsaml%2Fmetadata%2F17697');
+        $output .= $this->render_social_network('Twitter');
+        $output .= $this->render_social_network('Facebook');
+        $output .= $this->render_social_network('Website');
+        $output .= $this->render_social_network('Blog', 'https://superintendent.hcpss.org/');
+
+        return $output;
     }
 
     /**
