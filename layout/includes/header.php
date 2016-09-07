@@ -32,7 +32,7 @@ require_once($OUTPUT->get_include_file('pagesettings'));
 <head>
     <title><?php echo $OUTPUT->page_title(); ?></title>
     <link rel="shortcut icon" href="<?php echo $OUTPUT->favicon(); ?>"/>
-    <?php 
+    <?php
     echo $OUTPUT->get_csswww();
     echo $OUTPUT->standard_head_html();
     ?>
@@ -83,21 +83,7 @@ require_once($OUTPUT->get_include_file('pagesettings'));
                         <div class="pull-<?php echo ($left) ? 'right' : 'left'; ?>" id="socialnetworks">
                             <p id="socialheading"><?php echo get_string('socialnetworks', 'theme_essential') ?></p>
                             <ul class="socials unstyled">
-                                <?php
-                                // HCPSS Mod to reorder socials
-                                echo $OUTPUT->render_social_network('twitter');
-                                echo $OUTPUT->render_social_network('facebook');
-                                echo $OUTPUT->render_social_network('linkedin');
-                                echo $OUTPUT->render_social_network('youtube');
-                                echo $OUTPUT->render_social_network('flickr');
-                                echo $OUTPUT->render_social_network('pinterest');
-                                echo $OUTPUT->render_social_network('instagram');
-                                echo $OUTPUT->render_social_network('vk');
-                                echo $OUTPUT->render_social_network('skype');
-                                echo $OUTPUT->render_social_network('website');
-                                echo $OUTPUT->render_social_network('googleplus');
-                                //End HCPSS Mod
-                                ?>
+                                <?php echo $OUTPUT->render_social_networks(); ?>
                             </ul>
                         </div>
                     <?php

@@ -333,18 +333,11 @@ td.template-token.cell.c1.lastcol {
 }
 /* End modification to RSS Plus styles */
 
-/* Social images */
-.socialicon.synergy{
-    background-image: url([[pix:theme|icons/synergy]]);
-    background-position: center;
+/* Social icons */
+.socials img:hover {
+    box-shadow: none;
 }
 
-.socialicon.vimeo{
-    background-image: url([[pix:theme|icons/vimeo]]);
-    background-position: center;
-}
-
-.socialicon.workday{
-    background-image: url([[pix:theme|icons/workday]]);
-    background-position: center;
+ul.socials li {
+    padding: 0 0 0 5px;
 }
