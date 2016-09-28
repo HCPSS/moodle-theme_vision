@@ -31,7 +31,7 @@ $THEME->name = 'vision';
 
 $THEME->doctype = 'html5';
 $THEME->yuicssmodules = array();
-$THEME->parents = array('essential');
+$THEME->parents = array('essential', 'bootstrapbase');
 
 $THEME->sheets[] = 'moodle-rtl';
 $THEME->sheets[] = 'bootstrap-pix';

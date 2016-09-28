@@ -43,33 +43,6 @@ echo $OUTPUT->doctype();
     <!-- Start Analytics -->
     <?php require_once(\theme_essential\toolbox::get_tile_file('analytics')); ?>
     <!-- End Analytics -->
-    <script
-			  src="https://code.jquery.com/jquery-3.1.1.min.js"
-			  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-			  crossorigin="anonymous"></script>
-
-    <script>
-        $(document).ready(function(){
-            if($("body").hasClass("admin")){
-                return;
-            }
-
-            $("#essentialmenus").css("height", "0px");
-
-            $("a[data-target='#essentialmenus']").click(function(e){
-                $(this).toggleClass("collapsed");
-                $("#essentialmenus").toggleClass("in");
-
-                if($("#essentialmenus").css("height") != '38px'){
-                    $("#essentialmenus").css("height", "auto");
-                } else {
-                    $("#essentialmenus").css("height", "0px");
-                }
-
-                e.preventDefault();
-            });
-        });
-    </script>
 </head>
 
 <body <?php echo $OUTPUT->body_attributes($bodyclasses); ?>>
