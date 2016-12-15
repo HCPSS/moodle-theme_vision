@@ -75,7 +75,7 @@ $THEME->layouts['incourse'] = array(
 
 $THEME->javascripts_footer[] = 'coloursswitcher';
 
-$THEME->rendererfactory = 'theme_overridden_renderer_factory';
+$THEME->rendererfactory = 'theme_vision_overridden_renderer_factory';
 $THEME->csspostprocess = 'theme_vision_process_css';
 
 $THEME->lessfile = 'vision';
