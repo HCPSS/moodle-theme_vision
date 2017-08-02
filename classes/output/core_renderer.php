@@ -419,7 +419,8 @@ class core_renderer extends base_renderer {
 
         $classes = sprintf('socialicon %s', strtolower($name));
 
-        $src = sprintf('https://s3.amazonaws.com/hcpss.web.site/images/hub/%s.png', strtolower($name));
+        $slug = strtolower(preg_replace("/[^A-Za-z0-9 ]/", '', $name));
+        $src = sprintf('https://s3.amazonaws.com/hcpss.web.site/images/hub/%s.png', $slug);
         $image = html_writer::img($src, $name);
 
         $socialhtml = html_writer::start_tag('li');
@@ -446,11 +447,11 @@ class core_renderer extends base_renderer {
         $output .= $this->render_social_network('Workday', 'https://www.myworkday.com/hcpss/login.flex');
         $output .= $this->render_social_network('Synergy', 'https://sis.hcpss.org');
         $output .= $this->render_social_network('Canvas', 'https://hcpss.instructure.com');
-        $output .= $this->render_social_network('Frontline', ' https://hcpss.me/saml/saml2/idp/SSOService.php?spentityid=http%3A%2F%2Fwww.mylearningplan.com%2Fmvc%2Fsaml%2Fmetadata%2F17697');
+        $output .= $this->render_social_network('Frontline', 'https://hcpss.me/saml/saml2/idp/SSOService.php?spentityid=http%3A%2F%2Fwww.mylearningplan.com%2Fmvc%2Fsaml%2Fmetadata%2F17697');
+        $output .= $this->render_social_network('BRAINSTORM!', 'https://docs.google.com/forms/d/e/1FAIpQLSeP2jexB3jKJqZU55qM6eRj1YyqF_qnqj41SG6g9B8FG-MQ_Q/viewform');
         $output .= $this->render_social_network('Twitter');
         $output .= $this->render_social_network('Facebook');
         $output .= $this->render_social_network('Website');
-        $output .= $this->render_social_network('Blog', 'https://superintendent.hcpss.org/');
 
         return $output;
     }
