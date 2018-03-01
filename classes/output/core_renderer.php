@@ -449,7 +449,7 @@ class core_renderer extends base_renderer {
         $output .= $this->render_social_network('Synergy', 'https://sis.hcpss.org');
         $output .= $this->render_social_network('Canvas', 'https://hcpss.instructure.com');
         $output .= $this->render_social_network('Hoonuit', 'https://dw.hcpss.org');
-        $output .= $this->render_social_network('System Request', 'https://sr.hcpss.org');
+        $output .= $this->render_social_network('Service Request', 'https://sr.hcpss.org');
         $output .= $this->render_social_network('Frontline', 'https://hcpss.me/saml/saml2/idp/SSOService.php?spentityid=http%3A%2F%2Fwww.mylearningplan.com%2Fmvc%2Fsaml%2Fmetadata%2F17697');
         $output .= $this->render_social_network('BRAINSTORM!', 'https://docs.google.com/forms/d/e/1FAIpQLSeP2jexB3jKJqZU55qM6eRj1YyqF_qnqj41SG6g9B8FG-MQ_Q/viewform');
         $output .= $this->render_social_network('Website');
