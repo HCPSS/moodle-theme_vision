@@ -33,11 +33,12 @@ class theme_vision_overridden_renderer_factory extends theme_overridden_renderer
         ]);
 
         if (isset(self::$cache[$key])) {
-            return new self::$cache[$key]($page, $component, $subtype, $target);
+            $renderer = new self::$cache[$key]($page, $target);
+        } else {
+            // This is the expensive operation we are trying to avoid.
+            $renderer = parent::get_renderer($page, $component, $subtype, $target);
+            self::$cache[$key] = get_class($renderer);
         }
-
-        $renderer = parent::get_renderer($page, $component, $subtype, $target);
-        self::$cache[$key] = get_class($renderer);
 
         return $renderer;
     }
