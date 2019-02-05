@@ -34,6 +34,77 @@ use context_course;
 use moodle_url;
 
 class core_renderer extends base_renderer {
+
+    /**
+     * A cached list of forums that should be forced to use their default
+     * digest setting.
+     *
+     * This should only be accessed by self::getforceddefault().
+     *
+     * @var array
+     */
+    static protected $forceddefault;
+
+    /**
+     * Get a cached list of forums that should be forced to use their default
+     * digest setting.
+     *
+     * @return array
+     */
+    static protected function getforceddefault() {
+        if (self::$forceddefault === null) {
+            self::$forceddefault = array();
+            if ($default = get_config('local_forcedefaultdigest', 'forums')) {
+                self::$forceddefault = explode(',', $default);
+            }
+        }
+
+        return self::$forceddefault;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see core_renderer::render_single_select()
+     */
+    protected function render_single_select(\single_select $select) {
+        $o = [
+            -1 => 'Default (No digest)',
+            0 => 'No digest',
+            1 => 'Complete posts',
+            2 => 'Subjects only',
+        ];
+
+        if ($select->name == 'maildigest' && $select->options == $o) {
+            if (in_array($select->url->get_param('id'), self::getforceddefault())) {
+                // This is astounding, but instead of passing us a new
+                // \single_select object /mod/forum/index.php creates one
+                // \single_select object and passes it to us in a loop, just
+                // changing the values each time. So, changing them here,
+                // changes the values for all following iterations.
+                $help = get_string('explanation', 'local_forcedefaultdigest');
+
+                $selected = $select->selected;
+                $disabled = $select->disabled;
+                $tooltip = $select->tooltip;
+
+                $select->selected = -1;
+                $select->disabled = true;
+                $select->tooltip = $help;
+
+                $output = parent::render_single_select($select);
+                $output .= "<div><small>{$help}</small></div>";
+
+                $select->selected = $selected;
+                $select->disabled = $disabled;
+                $select->tooltip = $tooltip;
+
+                return $output;
+            }
+        }
+
+        return parent::render_single_select($select);
+    }
+
     /**
      * Outputs the page's footer
      * @return string HTML fragment
