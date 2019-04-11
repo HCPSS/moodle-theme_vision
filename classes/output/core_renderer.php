@@ -39,7 +39,7 @@ class core_renderer extends base_renderer {
      * A cached list of forums that should be forced to use their default
      * digest setting.
      *
-     * This should only be accessed by self::getforceddefault().
+     * This should only be accessed by self::getforcedindividual().
      *
      * @var array
      */
@@ -51,10 +51,10 @@ class core_renderer extends base_renderer {
      *
      * @return array
      */
-    static protected function getforceddefault() {
+    static protected function getforcedindividual() {
         if (self::$forceddefault === null) {
             self::$forceddefault = array();
-            if ($default = get_config('local_forcedefaultdigest', 'forums')) {
+            if ($default = get_config('local_forceindividualemail', 'forums')) {
                 self::$forceddefault = explode(',', $default);
             }
         }
@@ -67,39 +67,36 @@ class core_renderer extends base_renderer {
      * @see core_renderer::render_single_select()
      */
     protected function render_single_select(\single_select $select) {
-        $o = [
-            -1 => 'Default (No digest)',
-            0 => 'No digest',
-            1 => 'Complete posts',
-            2 => 'Subjects only',
-        ];
+        if (
+            $select->name == 'maildigest' && 
+            in_array($select->url->get_param('id'), self::getforcedindividual())
+        ) {
+            $help = get_string('explanation', 'local_forceindividualemail');
 
-        if ($select->name == 'maildigest' && $select->options == $o) {
-            if (in_array($select->url->get_param('id'), self::getforceddefault())) {
-                // This is astounding, but instead of passing us a new
-                // \single_select object /mod/forum/index.php creates one
-                // \single_select object and passes it to us in a loop, just
-                // changing the values each time. So, changing them here,
-                // changes the values for all following iterations.
-                $help = get_string('explanation', 'local_forcedefaultdigest');
+            // Instead of passing us a new \single_select object 
+            // /mod/forum/index.php creates one \single_select object and passes 
+            // it to us in a loop, just changing the values each time. So, 
+            // changing them here, changes the values for all following 
+            // iterations.
+            // 
+            // So, we need to store the existing values so we can restore them
+            // before returning.
+            $selected = $select->selected;
+            $disabled = $select->disabled;
+            $tooltip = $select->tooltip;
 
-                $selected = $select->selected;
-                $disabled = $select->disabled;
-                $tooltip = $select->tooltip;
+            $select->selected = $selected;
+            $select->disabled = true;
+            $select->tooltip = $help;
 
-                $select->selected = -1;
-                $select->disabled = true;
-                $select->tooltip = $help;
+            $output = parent::render_single_select($select);
+            $output .= "<div><small>{$help}</small></div>";
 
-                $output = parent::render_single_select($select);
-                $output .= "<div><small>{$help}</small></div>";
+            $select->selected = $selected;
+            $select->disabled = $disabled;
+            $select->tooltip = $tooltip;
 
-                $select->selected = $selected;
-                $select->disabled = $disabled;
-                $select->tooltip = $tooltip;
-
-                return $output;
-            }
+            return $output;
         }
 
         return parent::render_single_select($select);
