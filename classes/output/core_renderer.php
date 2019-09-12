@@ -68,17 +68,17 @@ class core_renderer extends base_renderer {
      */
     protected function render_single_select(\single_select $select) {
         if (
-            $select->name == 'maildigest' && 
+            $select->name == 'maildigest' &&
             in_array($select->url->get_param('id'), self::getforcedindividual())
         ) {
             $help = get_string('explanation', 'local_forceindividualemail');
 
-            // Instead of passing us a new \single_select object 
-            // /mod/forum/index.php creates one \single_select object and passes 
-            // it to us in a loop, just changing the values each time. So, 
-            // changing them here, changes the values for all following 
+            // Instead of passing us a new \single_select object
+            // /mod/forum/index.php creates one \single_select object and passes
+            // it to us in a loop, just changing the values each time. So,
+            // changing them here, changes the values for all following
             // iterations.
-            // 
+            //
             // So, we need to store the existing values so we can restore them
             // before returning.
             $selected = $select->selected;
@@ -514,12 +514,12 @@ class core_renderer extends base_renderer {
         $output = '';
 
         $output .= $this->render_social_network('Workday', 'https://www.myworkday.com/hcpss/login.flex');
+        $output .= $this->render_social_network('G Suite', 'https://drive.google.com/a/hcpss.org/');
         $output .= $this->render_social_network('Synergy', 'https://sis.hcpss.org');
         $output .= $this->render_social_network('Canvas', 'https://hcpss.instructure.com');
         $output .= $this->render_social_network('Hoonuit', 'https://dw.hcpss.org');
         $output .= $this->render_social_network('Service Request', 'https://sr.hcpss.org');
         $output .= $this->render_social_network('Frontline', 'https://login.frontlineeducation.com/sso/hcpss');
-        $output .= $this->render_social_network('BRAINSTORM!', 'https://docs.google.com/forms/d/e/1FAIpQLSeP2jexB3jKJqZU55qM6eRj1YyqF_qnqj41SG6g9B8FG-MQ_Q/viewform');
         $output .= $this->render_social_network('Website');
 
         return $output;
