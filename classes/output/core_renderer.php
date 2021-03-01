@@ -515,7 +515,7 @@ class core_renderer extends base_renderer {
 
         $output .= $this->render_social_network('Workday', 'https://www.myworkday.com/hcpss/login.flex');
         $output .= $this->render_social_network('G Suite', 'https://drive.google.com/a/hcpss.org/');
-        $output .= $this->render_social_network('Synergy', 'https://sis.hcpss.org');
+        $output .= $this->render_social_network('Synergy', 'https://hcpss.me/synergy');
         $output .= $this->render_social_network('Canvas', 'https://hcpss.instructure.com');
         $output .= $this->render_social_network('Hoonuit', 'https://dw.hcpss.org');
         $output .= $this->render_social_network('Service Request', 'https://sr.hcpss.org');
